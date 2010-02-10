@@ -25,6 +25,8 @@ extern NSDictionary *BPListSelectionItem(NSString *label, id value);
 @property (retain) NSArray *options;
 @property (retain) id value;
 
+- (id)initWithOptions:(NSArray *)someOptions;
+
 @end
 
 

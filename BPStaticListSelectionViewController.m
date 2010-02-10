@@ -27,6 +27,27 @@ static id Value(NSDictionary *item) {
 
 @implementation BPStaticListSelectionViewController
 
+#pragma mark -
+#pragma mark Construction and deallocation
+
+- (id)initWithOptions:(NSArray *)someOptions {
+	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+		options = [someOptions retain];
+	}
+	
+	return self;
+}
+
+
+- (void)dealloc {
+	[options release];
+	[value release];
+    [super dealloc];
+}
+
+#pragma mark -
+#pragma mark Accessors
+
 @synthesize delegate, options, value;
 
 #pragma mark Option and current selection management
@@ -106,11 +127,6 @@ static id Value(NSDictionary *item) {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)dealloc {
-	[options release];
-	[value release];
-    [super dealloc];
-}
 
 
 @end

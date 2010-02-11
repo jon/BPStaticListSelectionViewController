@@ -52,7 +52,7 @@ static id Value(NSDictionary *item) {
 
 #pragma mark Option and current selection management
 
-- (void)updateSelectedItem {
+- (void)updateSelectedItem:(BOOL)forced {
 	if (selectedIndex >= 0)
 		[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]]setAccessoryType:UITableViewCellAccessoryNone];
 	selectedIndex = -1;
@@ -69,7 +69,7 @@ static id Value(NSDictionary *item) {
 		 
 	if (selectedIndex >= 0) {
 		[[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndex inSection:0]] setAccessoryType:UITableViewCellAccessoryCheckmark];		
-		if ([delegate respondsToSelector:@selector(listSelection:didSelectValue:)])
+		if (!forced && [delegate respondsToSelector:@selector(listSelection:didSelectValue:)])
 			[delegate listSelection:self didSelectValue:Value(I(options, selectedIndex))];
 	}
 }
@@ -90,13 +90,13 @@ static id Value(NSDictionary *item) {
 		[value release];
 		value = [aValue retain];
 		[self didChangeValueForKey:@"value"];
-		[self updateSelectedItem];
+		[self updateSelectedItem:YES];
 	}
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-	[self updateSelectedItem];
+	[self updateSelectedItem:YES];
 }
 
 #pragma mark Table view methods
@@ -117,13 +117,15 @@ static id Value(NSDictionary *item) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
 	cell.textLabel.text = Label(I(options, indexPath.row));
+	if (indexPath.row == selectedIndex)
+		cell.accessoryType = UITableViewCellAccessoryCheckmark;
 	
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	self.value = Value(I(options, indexPath.row));
-	[self updateSelectedItem];
+	[self updateSelectedItem:NO];
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

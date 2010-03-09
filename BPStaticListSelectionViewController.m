@@ -9,12 +9,21 @@
 
 NSString * const BPListSelectionLabel = @"BPListSelectionLabel";
 NSString * const BPListSelectionValue = @"BPListSelectionValue";
+NSString * const BPListSelectionImageName = @"BPListSelectionImageName";
 
 NSDictionary *BPListSelectionItem(NSString *label, id value) {
 	return [NSDictionary dictionaryWithObjectsAndKeys:
 	 label, BPListSelectionLabel, 
 	 value, BPListSelectionValue, 
 	 nil];
+}
+
+NSDictionary *BPImageListSelectionItem(NSString *label, NSString *imageName, id value) {
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+			label, BPListSelectionLabel, 
+			imageName, BPListSelectionImageName,
+			value, BPListSelectionValue, 
+			nil];	
 }
 
 static NSString *Label(NSDictionary *item) {
@@ -25,17 +34,25 @@ static id Value(NSDictionary *item) {
 	return [item objectForKey:BPListSelectionValue];
 }
 
+static NSString *ImageName(NSDictionary *item) {
+	return [item objectForKey:BPListSelectionImageName];
+}
+
 @implementation BPStaticListSelectionViewController
 
 #pragma mark -
 #pragma mark Construction and deallocation
 
-- (id)initWithOptions:(NSArray *)someOptions {
-	if (self = [super initWithStyle:UITableViewStyleGrouped]) {
+- (id)initWithOptions:(NSArray *)someOptions style:(UITableViewStyle)style {
+	if (self = [super initWithStyle:style]) {
 		options = [someOptions retain];
 	}
 	
 	return self;
+}
+
+- (id)initWithOptions:(NSArray *)someOptions {
+	return [self initWithOptions:someOptions style:UITableViewStyleGrouped];
 }
 
 
@@ -116,7 +133,11 @@ static id Value(NSDictionary *item) {
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 	
-	cell.textLabel.text = Label(I(options, indexPath.row));
+	NSDictionary *option = I(options, indexPath.row);
+	
+	cell.textLabel.text = Label(option);
+	if (ImageName(option))
+		cell.imageView.image = [UIImage imageNamed:ImageName(option)];
 	if (indexPath.row == selectedIndex)
 		cell.accessoryType = UITableViewCellAccessoryCheckmark;
 	

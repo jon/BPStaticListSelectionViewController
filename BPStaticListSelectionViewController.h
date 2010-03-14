@@ -9,8 +9,10 @@
 
 extern NSString * const BPListSelectionLabel;
 extern NSString * const BPListSelectionValue;
+extern NSString * const BPListSelectionImageName;
 
 extern NSDictionary *BPListSelectionItem(NSString *label, id value);
+extern NSDictionary *BPImageListSelectionItem(NSString *label, NSString *imageName, id value);
 
 @interface BPStaticListSelectionViewController : UITableViewController {
 	id delegate;

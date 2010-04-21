@@ -150,7 +150,12 @@ static NSString *ImageName(NSDictionary *item) {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark -
+#pragma mark Popover
 
+- (CGSize)contentSizeForViewInPopover {
+	return CGSizeMake(320, 500);
+}
 
 @end
 
